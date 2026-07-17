@@ -58,7 +58,7 @@
   .panel{background:var(--card);border:0.5px solid var(--line);border-radius:16px;padding:18px 18px 6px;margin-top:12px;}
 
   .opt-label{font-size:12px;color:var(--muted);margin:0 0 8px;font-weight:500;}
-  .phones{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;}
+  .phones{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
   .popt{background:var(--paper);border:1.5px solid var(--line);border-radius:10px;padding:10px 8px;cursor:pointer;text-align:center;transition:border-color .12s;}
   .popt:hover{border-color:var(--line-strong);}
   .popt .pnm{font-size:13px;font-weight:500;line-height:1.2;}
@@ -183,6 +183,7 @@ const PLANS = {
         ]}
 };
 const PHONES = {
+  base:   {name:'17',         price:{256:799,  512:999}},
   pro:    {name:'17 Pro',     price:{256:1099, 512:1299}},
   promax: {name:'17 Pro Max', price:{256:1199, 512:1399}},
   air:    {name:'Air',        price:{256:999,  512:1199}}
