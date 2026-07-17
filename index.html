@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our T-Mobile family plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F4F5F2; --card:#FBFBF9; --ink:#1A1C1A; --muted:#6C6F69; --faint:#9A9C95;
+    --line:#E0E0D8; --line-strong:#CBCBC1;
+    --eb:#3E3B8C; --eb-tint:#ECEBF8;
+    --bv:#2C6E49; --bv-tint:#E6F1E9;
+    --warn:#8A5D0E; --warn-tint:#F6ECD5;
+    --accent:var(--eb); --accent-tint:var(--eb-tint);
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;line-height:1.55;padding:clamp(16px,4vw,40px) clamp(14px,4vw,32px) 48px;}
+  .wrap{max-width:640px;margin:0 auto;}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;}
+  h1{font-family:"Fraunces",serif;font-weight:500;font-size:clamp(26px,7vw,40px);line-height:1.05;letter-spacing:-0.01em;margin:0 0 8px;}
+  .lede{font-size:15px;color:var(--muted);margin:0 0 24px;}
+  .sec-label{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--faint);margin:26px 0 10px;}
+
+  /* plan toggle */
+  .plan-toggle{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .plan-btn{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:14px 14px;cursor:pointer;text-align:left;transition:border-color .12s;}
+  .plan-btn:hover{border-color:var(--line-strong);}
+  .plan-btn .pn{font-family:"Fraunces",serif;font-size:17px;font-weight:500;margin:0;}
+  .plan-btn .pp{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--muted);margin:3px 0 0;}
+  .plan-btn.on[data-plan="eb"]{border-color:var(--eb);background:var(--eb-tint);}
+  .plan-btn.on[data-plan="bv"]{border-color:var(--bv);background:var(--bv-tint);}
+
+  .benefits{background:var(--card);border:0.5px solid var(--line);border-radius:12px;padding:14px 16px;margin-top:12px;}
+  .benefits ul{list-style:none;margin:0;padding:0;}
+  .benefits li{display:flex;gap:9px;align-items:flex-start;font-size:13.5px;padding:4px 0;color:var(--ink);}
+  .benefits li .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);margin-top:7px;flex:none;}
+  .benefits li.diff{font-weight:500;}
+  .benefits li.warnrow .dot{background:var(--warn);}
+  .benefits li.warnrow{color:var(--warn);}
+
+  .bvwarn{display:none;background:var(--warn-tint);color:var(--warn);border-radius:10px;padding:10px 13px;font-size:12.5px;margin-top:10px;line-height:1.5;}
+  .bvwarn.show{display:block;}
+
+  /* person tabs */
+  .tabs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+  .tab{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;transition:border-color .12s;}
+  .tab:hover{border-color:var(--line-strong);}
+  .tab .av{width:32px;height:32px;border-radius:50%;background:#EDEDE6;color:var(--muted);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px;}
+  .tab .nm{font-size:13px;color:var(--muted);}
+  .tab.on{border-color:var(--accent);background:var(--accent-tint);}
+  .tab.on .av{background:var(--accent);color:#fff;}
+  .tab.on .nm{color:var(--ink);font-weight:500;}
+
+  .panel{background:var(--card);border:0.5px solid var(--line);border-radius:16px;padding:18px 18px 6px;margin-top:12px;}
+
+  .opt-label{font-size:12px;color:var(--muted);margin:0 0 8px;font-weight:500;}
+  .phones{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;}
+  .popt{background:var(--paper);border:1.5px solid var(--line);border-radius:10px;padding:10px 8px;cursor:pointer;text-align:center;transition:border-color .12s;}
+  .popt:hover{border-color:var(--line-strong);}
+  .popt .pnm{font-size:13px;font-weight:500;line-height:1.2;}
+  .popt .ppr{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--muted);margin-top:3px;}
+  .popt.on{border-color:var(--accent);background:var(--accent-tint);}
+
+  .store{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;margin-bottom:16px;}
+  .sopt{background:var(--paper);border:0;padding:8px 18px;cursor:pointer;font-size:13px;font-family:"IBM Plex Mono",monospace;color:var(--muted);}
+  .sopt.on{background:var(--accent);color:#fff;}
+  .sopt+.sopt{border-left:1px solid var(--line);}
+
+  .tradeline{font-size:13px;color:var(--muted);background:var(--paper);border-radius:9px;padding:10px 12px;margin-bottom:8px;line-height:1.5;}
+  .tradeline b{color:var(--ink);font-weight:500;}
+  .devline{font-size:12.5px;color:var(--muted);padding:2px 2px 14px;line-height:1.5;}
+  .devline b{color:var(--ink);font-weight:500;font-family:"IBM Plex Mono",monospace;}
+
+  .tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;border-top:0.5px solid var(--line);padding-top:16px;}
+  .tile{background:var(--paper);border-radius:10px;padding:12px 13px;}
+  .tile.big{grid-column:1 / -1;background:var(--accent-tint);}
+  .tile .tl{font-size:12px;color:var(--muted);margin:0 0 4px;}
+  .tile .tv{font-family:"Fraunces",serif;font-weight:600;font-size:22px;line-height:1;}
+  .tile.big .tv{font-size:30px;color:var(--accent);}
+  .tile .ts{font-size:11px;color:var(--faint);margin:4px 0 0;font-family:"IBM Plex Mono",monospace;}
+  .panel-pad{height:12px;}
+  .calc{margin-top:12px;border-top:0.5px solid rgba(0,0,0,.1);padding-top:10px;font-family:"IBM Plex Mono",monospace;font-size:12px;}
+  .calc .crow{display:flex;justify-content:space-between;gap:12px;padding:3px 0;color:var(--muted);}
+  .calc .crow .cv{white-space:nowrap;color:var(--ink);font-variant-numeric:tabular-nums;}
+  .calc .crow.total{border-top:1px solid rgba(0,0,0,.18);margin-top:6px;padding-top:8px;}
+  .calc .crow.total span{color:var(--accent);font-weight:500;}
+
+  /* family */
+  .family{margin-top:20px;background:var(--ink);color:#fff;border-radius:16px;padding:18px 20px;}
+  .family h3{font-family:"Fraunces",serif;font-weight:500;font-size:18px;margin:0 0 14px;color:#fff;}
+  .frow{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;font-size:14px;border-bottom:1px solid rgba(255,255,255,.12);}
+  .frow:last-of-type{border-bottom:0;}
+  .frow .fl{color:rgba(255,255,255,.72);}
+  .frow .fv{font-family:"IBM Plex Mono",monospace;font-weight:500;}
+  .frow.total{border-top:1.5px solid rgba(255,255,255,.4);margin-top:6px;padding-top:12px;}
+  .frow.total .fl{color:#fff;font-family:"IBM Plex Sans";font-weight:600;font-size:15px;}
+  .frow.total .fv{font-family:"Fraunces",serif;font-size:26px;font-weight:600;}
+  .fnote{font-size:11.5px;color:rgba(255,255,255,.6);margin:12px 0 0;line-height:1.5;font-family:"IBM Plex Mono",monospace;}
+
+  .foot{margin-top:22px;font-size:11.5px;color:var(--faint);line-height:1.6;font-family:"IBM Plex Mono",monospace;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="eyebrow">Winny · Tong · Eric · 3-line family plan</p>
+  <h1>Our T-Mobile setup</h1>
+  <p class="lede">Pick the plan, tap your name, choose your phone. Prices update live. Opening at Costco, so connection fees are waived and the Costco card is split three ways.</p>
+
+  <p class="sec-label">1 · Choose the plan (everyone shares one)</p>
+  <div class="plan-toggle">
+    <button class="plan-btn on" data-plan="eb"><p class="pn">Experience Beyond</p><p class="pp">$170/mo · 3 lines</p></button>
+    <button class="plan-btn" data-plan="bv"><p class="pn">Better Value</p><p class="pp">$140/mo · 3 lines</p></button>
+  </div>
+  <div class="benefits"><ul id="benefits"></ul></div>
+  <div class="bvwarn" id="bvwarn">Heads up: Better Value needs the rep to confirm you qualify (you're at ~4-year tenure with one port-in). Don't leave the counter until it's active.</div>
+
+  <p class="sec-label">2 · Who are you?</p>
+  <div class="tabs">
+    <button class="tab on" data-person="winny"><span class="av">W</span><span class="nm">Winny</span></button>
+    <button class="tab" data-person="tong"><span class="av">T</span><span class="nm">Tong</span></button>
+    <button class="tab" data-person="eric"><span class="av">E</span><span class="nm">Eric</span></button>
+  </div>
+
+  <div class="panel">
+    <p class="opt-label">Pick your new phone</p>
+    <div class="phones" id="phones"></div>
+    <p class="opt-label">Storage</p>
+    <div class="store" id="store">
+      <button class="sopt on" data-storage="256">256 GB</button>
+      <button class="sopt" data-storage="512">512 GB</button>
+    </div>
+    <div class="tradeline" id="tradeline"></div>
+    <div class="devline" id="devline"></div>
+    <div class="tiles">
+      <div class="tile"><p class="tl">Your monthly</p><p class="tv" id="monthly">—</p><p class="ts" id="monthly-s"></p></div>
+      <div class="tile"><p class="tl">Upfront at signing</p><p class="tv" id="upfront">—</p><p class="ts" id="upfront-s"></p></div>
+      <div class="tile big"><p class="tl">Your 24-month total</p><p class="tv" id="total">—</p><div class="calc" id="calc"></div></div>
+    </div>
+    <div class="panel-pad"></div>
+  </div>
+
+  <div class="family">
+    <h3>Family total — 24 months</h3>
+    <div class="frow"><span class="fl">Combined monthly bill</span><span class="fv" id="fam-monthly">—</span></div>
+    <div class="frow"><span class="fl">Upfront at signing (taxes + Tong's trade phone)</span><span class="fv" id="fam-upfront">—</span></div>
+    <div class="frow"><span class="fl">Costco card (split 3 ways)</span><span class="fv" id="fam-costco">—</span></div>
+    <div class="frow total"><span class="fl">All-in over 24 months</span><span class="fv" id="fam-total">—</span></div>
+    <p class="fnote" id="fam-note"></p>
+  </div>
+
+  <p class="foot" id="foot"></p>
+
+</div>
+
+<script>
+const PLANS = {
+  eb: { name:'Experience Beyond', monthly3:170, costco:400,
+        credits:{winny:1100, tong:1100, eric:1100},
+        tong:{name:'Refurb S22 Ultra', cost:280},
+        benefits:[
+          {t:'Upgrade to a new phone every year', diff:true},
+          {t:'5-year price lock'},
+          {t:'Netflix, Apple TV+ ($3/mo), Hulu, T-Satellite'},
+          {t:'Unlimited premium data + hotspot, 4K streaming'},
+          {t:'15GB high-speed data in 215+ countries', diff:true},
+          {t:'Stays eligible for future free-line promos', diff:true}
+        ]},
+  bv: { name:'Better Value', monthly3:140, costco:350,
+        credits:{winny:830, tong:830, eric:1100},
+        tong:{name:'Renewed Galaxy S20 FE', cost:136},
+        benefits:[
+          {t:'Upgrade every 2 years', diff:true},
+          {t:'5-year price lock'},
+          {t:'Netflix, Apple TV+ ($3/mo), Hulu, T-Satellite'},
+          {t:'Unlimited premium data + hotspot, 4K streaming'},
+          {t:'30GB high-speed (then slowed) in 215+ countries', diff:true},
+          {t:'No future free lines — permanent', diff:true, warn:true}
+        ]}
+};
+const PHONES = {
+  pro:    {name:'17 Pro',     price:{256:1099, 512:1299}},
+  promax: {name:'17 Pro Max', price:{256:1199, 512:1399}},
+  air:    {name:'Air',        price:{256:999,  512:1199}}
+};
+const TAX = 0.09375;
+const PEOPLE = ['winny','tong','eric'];
+const NAMES = {winny:'Winny', tong:'Tong', eric:'Eric'};
+
+let state = {
+  plan:'eb', active:'winny',
+  choices:{ winny:{phone:'pro',storage:256}, tong:{phone:'pro',storage:256}, eric:{phone:'pro',storage:256} }
+};
+
+const money  = n => '$' + Math.round(n).toLocaleString();
+const money2 = n => '$' + (Math.round(n*100)/100).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+
+function calc(person){
+  const P = PLANS[state.plan];
+  const c = state.choices[person];
+  const price = PHONES[c.phone].price[c.storage];
+  const credit = P.credits[person];
+  const overage = Math.max(0, price - credit);
+  const deviceMonthly = overage/24;
+  const planShare = P.monthly3/3;
+  const monthly = planShare + deviceMonthly;
+  const tax = price*TAX;
+  const tradeCost = person==='tong' ? P.tong.cost : 0;
+  const costcoShare = P.costco/3;
+  const total24 = monthly*24 + tax + tradeCost - costcoShare;
+  return {price,credit,overage,deviceMonthly,planShare,monthly,tax,tradeCost,costcoShare,total24};
+}
+
+function setAccent(){
+  const c = state.plan==='eb' ? 'var(--eb)' : 'var(--bv)';
+  const t = state.plan==='eb' ? 'var(--eb-tint)' : 'var(--bv-tint)';
+  document.documentElement.style.setProperty('--accent', c);
+  document.documentElement.style.setProperty('--accent-tint', t);
+}
+
+function render(){
+  const P = PLANS[state.plan];
+  setAccent();
+
+  document.querySelectorAll('.plan-btn').forEach(b=>b.classList.toggle('on', b.dataset.plan===state.plan));
+  document.getElementById('bvwarn').classList.toggle('show', state.plan==='bv');
+
+  const ul = document.getElementById('benefits'); ul.innerHTML='';
+  P.benefits.forEach(b=>{
+    const li=document.createElement('li');
+    li.className=(b.diff?'diff ':'')+(b.warn?'warnrow':'');
+    li.innerHTML='<span class="dot"></span><span>'+b.t+'</span>';
+    ul.appendChild(li);
+  });
+
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on', b.dataset.person===state.active));
+
+  const c = state.choices[state.active];
+  const ph = document.getElementById('phones'); ph.innerHTML='';
+  Object.keys(PHONES).forEach(k=>{
+    const on = c.phone===k;
+    const b=document.createElement('button');
+    b.className='popt'+(on?' on':''); b.dataset.phone=k;
+    b.innerHTML='<div class="pnm">'+PHONES[k].name+'</div><div class="ppr">'+money(PHONES[k].price[c.storage])+'</div>';
+    ph.appendChild(b);
+  });
+  document.querySelectorAll('.sopt').forEach(b=>b.classList.toggle('on', +b.dataset.storage===c.storage));
+
+  const r = calc(state.active);
+  const tl = document.getElementById('tradeline');
+  if(state.active==='winny') tl.innerHTML='<b>Trade in your iPhone 14 Pro</b> → unlocks a '+money(r.credit)+' credit.';
+  else if(state.active==='tong') tl.innerHTML='<b>Buy a '+P.tong.name+' (~'+money(P.tong.cost)+')</b> to trade → unlocks a '+money(r.credit)+' credit.';
+  else tl.innerHTML='<b>AT&amp;T switch bonus</b> → '+money(r.credit)+' credit, no trade-in of your own needed.';
+
+  const dev = document.getElementById('devline');
+  const pname = 'iPhone '+PHONES[c.phone].name+' '+c.storage+'GB';
+  if(r.overage>0)
+    dev.innerHTML=pname+' — '+money(r.price)+'. Credit covers '+money(r.credit)+'; you pay the <b>'+money(r.overage)+'</b> gap at ~'+money2(r.deviceMonthly)+'/mo.';
+  else
+    dev.innerHTML=pname+' — '+money(r.price)+'. Credit ('+money(r.credit)+') covers it fully → <b>phone is free</b>.';
+
+  document.getElementById('monthly').textContent=money2(r.monthly);
+  document.getElementById('monthly-s').textContent='plan share '+money2(r.planShare)+(r.deviceMonthly>0?' + phone '+money2(r.deviceMonthly):'');
+  document.getElementById('upfront').textContent=money(r.tax+r.tradeCost);
+  document.getElementById('upfront-s').textContent = state.active==='tong' ? ('tax '+money(r.tax)+' + phone '+money(r.tradeCost)) : ('sales tax on '+money(r.price));
+  document.getElementById('total').textContent=money(r.total24);
+  const rows=[
+    {l:'Plan share ('+money2(r.planShare)+' \u00d7 24)', v:money(r.planShare*24)},
+    {l:(r.overage>0?'Phone \u2014 you pay the gap':'Phone \u2014 credit covers it'), v:'+ '+money(r.overage)},
+    {l:'Sales tax (upfront)', v:'+ '+money(r.tax)}
+  ];
+  if(r.tradeCost>0) rows.push({l:'Trade phone ('+P.tong.name+')', v:'+ '+money(r.tradeCost)});
+  rows.push({l:'Costco card \u00f7 3', v:'\u2212 '+money(r.costcoShare)});
+  let ch=rows.map(x=>'<div class="crow"><span>'+x.l+'</span><span class="cv">'+x.v+'</span></div>').join('');
+  ch+='<div class="crow total"><span>= Your 24-month total</span><span class="cv">'+money(r.total24)+'</span></div>';
+  document.getElementById('calc').innerHTML=ch;
+
+  let fMonthly=0,fUpfront=0,fTotal=0;
+  PEOPLE.forEach(p=>{const x=calc(p); fMonthly+=x.monthly; fUpfront+=x.tax+x.tradeCost; fTotal+=x.total24;});
+  document.getElementById('fam-monthly').textContent=money2(fMonthly)+'/mo';
+  document.getElementById('fam-upfront').textContent=money(fUpfront);
+  document.getElementById('fam-costco').textContent='− '+money(P.costco);
+  document.getElementById('fam-total').textContent=money(fTotal);
+  document.getElementById('fam-note').textContent='Connection fees waived (Costco). '+money(P.costco)+' card split 3 ways = '+money(P.costco/3)+' each. Excludes monthly service taxes/fees.';
+
+  document.getElementById('foot').textContent='Credits paid as bill credits over 24 months — keep the line & plan and don\u2019t pay the phone off early. Sales tax (~9.375% CA) is on the full pre-credit phone price, due at signing. Winny & Eric get '+money(PLANS[state.plan].credits.winny===1100?1100:830)+'/'+money(1100)+' credits; on Experience Beyond all three are $1,100.';
+}
+
+document.addEventListener('click', e=>{
+  const pb=e.target.closest('.plan-btn'); if(pb){ state.plan=pb.dataset.plan; render(); return; }
+  const tb=e.target.closest('.tab'); if(tb){ state.active=tb.dataset.person; render(); return; }
+  const po=e.target.closest('.popt'); if(po){ state.choices[state.active].phone=po.dataset.phone; render(); return; }
+  const so=e.target.closest('.sopt'); if(so){ state.choices[state.active].storage=+so.dataset.storage; render(); return; }
+});
+
+render();
+</script>
+</body>
+</html>
